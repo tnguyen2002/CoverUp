@@ -20,9 +20,6 @@ const Groupme = ({ groups, setGroups }) => {
 			`${baseURL}/groups?access_token=${accessToken}`
 		);
 		await response.json().then((data) => {
-			// data.response.forEach((group) => {
-			// 	// await getImageBlob(group);
-			// });
 			setGroups(data.response);
 		});
 	};

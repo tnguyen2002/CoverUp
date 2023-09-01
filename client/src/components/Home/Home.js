@@ -28,7 +28,7 @@ const Homepage = () => {
 						<div key={key}>
 							{group.name}
 							{group.image_url ? (
-								<img height="25px" src={group.image_url} alt={group.name} />
+								<img height="50px" src={group.image_url} alt={group.name} />
 							) : (
 								<div>No image</div>
 							)}
@@ -36,6 +36,25 @@ const Homepage = () => {
 					);
 				})}
 			</div>
+			<div>
+				{groups.map((group, key) => {
+					return (
+						<div key={key}>
+							{group.name}
+							{group.image_url ? (
+								<img
+									height="100px"
+									src={`data:image/png;base64,${group.stability_images_base64s}`}
+									alt="no stability image"
+								/>
+							) : (
+								<div>No image</div>
+							)}
+						</div>
+					);
+				})}
+			</div>
+
 			<Stability groups={groups} setGroups={setGroups} />
 			<Groupme groups={groups} setGroups={setGroups} />
 		</div>

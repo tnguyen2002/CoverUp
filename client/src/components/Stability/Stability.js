@@ -7,35 +7,38 @@ const apiKey = process.env.REACT_APP_STABILITY_API_KEY;
 if (!apiKey) throw new Error("Missing Stability API key.");
 
 const Stability = ({ groups, setGroups }) => {
-	const stabilityCall = async (group) => {
-		console.log(group);
-		// const formData = new FormData();
-		// formData.append("init_image", resizedBlob);
-		// formData.append("init_image_mode", "IMAGE_STRENGTH");
-		// formData.append("image_strength", 0.5);
-		// formData.append("text_prompts[0][text]", "light background with clouds");
-		// formData.append("style_preset", "origami");
-		// formData.append("cfg_scale", 7);
-		// formData.append("samples", 1);
-		// formData.append("steps", 30);
-		// const response = await fetch(
-		// 	`${apiHost}/v1/generation/${engineId}/image-to-image`,
-		// 	{
-		// 		method: "POST",
-		// 		headers: {
-		// 			Accept: "application/json",
-		// 			Authorization: `Bearer ${apiKey}`,
-		// 		},
-		// 		body: formData,
-		// 	}
-		// );
-		// if (!response.ok) {
-		// 	throw new Error(`Non-200 response: ${await response.text()}`);
-		// }
-		// const responseJSON = await response.json();
-		// responseJSON.artifacts.forEach((image, key) => {
-		// 	setResponseBase64(image.base64);
-		// });
+	const stabilityCall = async (groupKey) => {
+		const formData = new FormData();
+		formData.append("init_image", groups[groupKey].resizedBlob);
+		formData.append("init_image_mode", "IMAGE_STRENGTH");
+		formData.append("image_strength", 0.5);
+		formData.append("text_prompts[0][text]", "light background with clouds");
+		formData.append("style_preset", "origami");
+		formData.append("cfg_scale", 7);
+		formData.append("samples", 1);
+		formData.append("steps", 30);
+		const response = await fetch(
+			`${apiHost}/v1/generation/${engineId}/image-to-image`,
+			{
+				method: "POST",
+				headers: {
+					Accept: "application/json",
+					Authorization: `Bearer ${apiKey}`,
+				},
+				body: formData,
+			}
+		);
+		if (!response.ok) {
+			throw new Error(`Non-200 response: ${await response.text()}`);
+		}
+		const responseJSON = await response.json();
+		responseJSON.artifacts.forEach((image, key) => {
+			// console.log("image", image.base64);
+			const newGroups = [...groups];
+			newGroups[groupKey].stability_images_base64s = image.base64;
+			setGroups(newGroups);
+		});
+		return new Promise((resolve) => resolve(responseJSON));
 	};
 	const blobify = (canvas) => {
 		return new Promise((resolve, reject) => {
@@ -76,7 +79,7 @@ const Stability = ({ groups, setGroups }) => {
 		ctx.drawImage(img, 0, 0, sw, sh);
 		ctx.canvas.originalWidth = img.width;
 		ctx.canvas.originalHeight = img.height;
-		return canvas;
+		return new Promise((resolve) => resolve(canvas));
 	};
 	const getImageBlob = async (group, key) => {
 		if (group.image_url) {
@@ -93,18 +96,33 @@ const Stability = ({ groups, setGroups }) => {
 					newGroups[key].resizedBlob = resizedBlob;
 					setGroups(newGroups);
 				});
+			return new Promise((resolve) => resolve(groups[key].resizedBlob));
 		} else {
 			console.log(group.name, "no image");
 			const newGroups = groups;
 			newGroups[key].resizedBlob = null;
 			newGroups[key].base64 = null;
 			setGroups(newGroups);
+			return new Promise((resolve) => resolve(groups[key].resizedBlob));
 		}
 	};
 	const handleGenerate = () => {
 		groups.map(async (group, key) => {
-			await getImageBlob(group, key);
+			const groupImageBlob = await getImageBlob(group, key);
+			// console.log("group", group.name, key);
+			// console.log(groupImageBlob);
+			if (groupImageBlob) {
+				const response = await stabilityCall(key);
+				console.log("groups", groups);
+				console.log("response after call", response);
+			}
 		});
+		// groups.map(async (group, key) => {
+		// 	if (key == 0 && group.resizedBlob) {
+		// 		await stabilityCall(key);
+		// 		console.log("groups after stability call", groups);
+		// 	}
+		// });
 	};
 
 	return (
