@@ -1,0 +1,91 @@
+/* Home.css */
+
+.HomeContainer {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-evenly;
+	height: 75vh;
+	padding: 2.5vh 2.5vw;
+	box-sizing: border-box;
+	font-family: Arial, sans-serif;
+	overflow-y: scroll;
+}
+
+.TextContainer {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	border: 1px solid #ccc;
+	min-height: 10vh;
+	height: 100%;
+	width: 80%; /* Updated width using relative measurement */
+	border-radius: 2vw; /* Using relative measurement for border radius */
+	background-color: rgb(240, 223, 223);
+}
+.TextBox {
+	height: 100%;
+	width: 80%;
+	border-radius: 2vw; /* Using relative measurement for border radius */
+	padding: 10%;
+	background-color: rgb(240, 223, 223);
+}
+.CommandContainer {
+	display: flex;
+	height: 100%;
+	width: auto;
+	flex-direction: column;
+	border: 1px solid #ccc;
+	min-height: 10vh;
+	border-radius: 2vw; /* Using relative measurement for border radius */
+	margin: 2vh 0;
+	background-color: rgb(240, 223, 223);
+	overflow-y: auto;
+}
+
+.CommandBox {
+	height: 20%;
+}
+.messageBox {
+	height: 80%;
+	width: 100%;
+	border-radius: 2vw; /* Using relative measurement for border radius */
+	background-color: rgb(240, 223, 223);
+}
+
+button {
+	background-color: #007bff;
+	color: white;
+	border: none;
+	border-radius: 1vw;
+	padding: 2vh 4vw;
+	cursor: pointer;
+	font-size: 2vw;
+}
+
+button:hover {
+	background-color: #0056b3;
+}
+
+.user {
+	color: #007bff;
+	margin-left: 2vw;
+}
+
+.system {
+	color: #999;
+	margin-left: 2vw;
+}
+
+.highlighted {
+	background-color: #ffd700;
+	padding: 0.5vh 1vw;
+	border-radius: 0.5vw;
+}
+
+/* Responsive design for smaller screens */
+@media (max-width: 600px) {
+	.TextBox {
+		min-height: 15vh;
+	}
+}
