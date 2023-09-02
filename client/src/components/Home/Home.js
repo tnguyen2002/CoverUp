@@ -21,7 +21,7 @@ const Homepage = () => {
 	// };
 
 	return (
-		<div className="HomeContainer">
+		<div className="bg-black">
 			<div>
 				{groups.map((group, key) => {
 					return (

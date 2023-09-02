@@ -109,37 +109,14 @@ const Stability = ({ groups, setGroups }) => {
 	const handleGenerate = () => {
 		groups.map(async (group, key) => {
 			const groupImageBlob = await getImageBlob(group, key);
-			// console.log("group", group.name, key);
-			// console.log(groupImageBlob);
 			if (groupImageBlob) {
 				const response = await stabilityCall(key);
-				console.log("groups", groups);
-				console.log("response after call", response);
 			}
 		});
-		// groups.map(async (group, key) => {
-		// 	if (key == 0 && group.resizedBlob) {
-		// 		await stabilityCall(key);
-		// 		console.log("groups after stability call", groups);
-		// 	}
-		// });
 	};
 
 	return (
 		<div>
-			{/* {groups.Base64s.map((base64) => {
-				if(base64)
-				return (
-					<div>
-						<img
-							height="100px"
-							src={`data:image/png;base64,${base64}`}
-							alt="base64 response"
-						/>
-					</div>
-				);
-			})} */}
-			{/* <img height="50px" src={testUrl} alt="nothing here" /> */}
 			<button onClick={() => handleGenerate()}>Generate</button>
 		</div>
 	);
