@@ -21,42 +21,46 @@ const Homepage = () => {
 	// };
 
 	return (
-		<div className="bg-black">
-			<div>
-				{groups.map((group, key) => {
-					return (
-						<div key={key}>
-							{group.name}
-							{group.image_url ? (
-								<img height="50px" src={group.image_url} alt={group.name} />
-							) : (
-								<div>No image</div>
-							)}
-						</div>
-					);
-				})}
-			</div>
-			<div>
-				{groups.map((group, key) => {
-					return (
-						<div key={key}>
-							{group.name}
-							{group.image_url ? (
-								<img
-									height="100px"
-									src={`data:image/png;base64,${group.stability_images_base64s}`}
-									alt="no stability image"
-								/>
-							) : (
-								<div>No image</div>
-							)}
-						</div>
-					);
-				})}
-			</div>
-
-			<Stability groups={groups} setGroups={setGroups} />
+		<div className="flex flex-col">
 			<Groupme groups={groups} setGroups={setGroups} />
+			<div className="flex flex-row align-center">
+				<div>
+					{groups.map((group, key) => {
+						return (
+							<div key={key}>
+								{group.name}
+								{group.image_url ? (
+									<img height="50px" src={group.image_url} alt={group.name} />
+								) : (
+									<div>No image</div>
+								)}
+							</div>
+						);
+					})}
+				</div>
+				<div>
+					{groups.map((group, key) => {
+						return (
+							<div key={key}>
+								{group.name}
+								{group.image_url ? (
+									<img
+										height="100px"
+										src={`data:image/png;base64,${group.stability_images_base64s}`}
+										alt="no stability image"
+									/>
+								) : (
+									<div>No image</div>
+								)}
+							</div>
+						);
+					})}
+				</div>
+
+				{groups.length > 0 && (
+					<Stability groups={groups} setGroups={setGroups} />
+				)}
+			</div>
 		</div>
 	);
 };
