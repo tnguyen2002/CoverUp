@@ -114,9 +114,9 @@ const Stability = ({ groups, setGroups, setGenerated }) => {
 	};
 
 	return (
-		<div className="ml-auto">
-			<button onClick={() => handleGenerate()}>Generate</button>
-		</div>
+		<button className="ml-auto" onClick={() => handleGenerate()}>
+			Generate
+		</button>
 	);
 };
 export default Stability;

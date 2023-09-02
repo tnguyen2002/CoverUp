@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import fetch from "node-fetch";
 import Groupme from "../Groupme/Groupeme";
 import Stability from "../Stability/Stability";
 import "./Home.css";
@@ -7,16 +6,26 @@ import "./Home.css";
 const Homepage = () => {
 	const [groups, setGroups] = useState([]);
 	const [generated, setGenerated] = useState(false);
-
+	const [auth, setAuth] = useState(false);
+	// useEffect(() => {
+	// 	console.log(sessionStorage);
+	// }, []);
 	return (
 		<div className="flex flex-col w-4/5 m-8 rounded">
-			<div className="flex flex-row items-center">
-				<Groupme groups={groups} setGroups={setGroups} />
-				<Stability
+			<div className="flex flex-row justify-center h-1/2">
+				<Groupme
 					groups={groups}
 					setGroups={setGroups}
-					setGenerated={setGenerated}
+					auth={auth}
+					setAuth={setAuth}
 				/>
+				{auth && (
+					<Stability
+						groups={groups}
+						setGroups={setGroups}
+						setGenerated={setGenerated}
+					/>
+				)}
 			</div>
 			<div className="flex flex-row justify-evenly w-full">
 				<div className="flex flex-wrap w-2/4 m-2">
