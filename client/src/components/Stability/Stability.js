@@ -1,12 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import { promises } from "fs";
+import React from "react";
+import "./Stability.css";
 const engineId = "stable-diffusion-v1-5";
 const apiHost = process.env.API_HOST ?? "https://api.stability.ai";
 const apiKey = process.env.REACT_APP_STABILITY_API_KEY;
 if (!apiKey) throw new Error("Missing Stability API key.");
 
-const Stability = ({ groups, setGroups }) => {
+const Stability = ({ groups, setGroups, setGenerated }) => {
 	const stabilityCall = async (groupKey) => {
 		const formData = new FormData();
 		formData.append("init_image", groups[groupKey].resizedBlob);
@@ -85,8 +84,6 @@ const Stability = ({ groups, setGroups }) => {
 		if (group.image_url) {
 			const imageID = group.image_url.split("/")[3];
 			const api = `http://localhost:4000/images/${imageID}`;
-			// console.log(group.image_url);
-			// console.log("Api name", api);
 			const image = await fetch(`http://localhost:4000/images/${imageID}`)
 				.then((response) => response.blob())
 				.then(async (blob) => {
@@ -113,10 +110,11 @@ const Stability = ({ groups, setGroups }) => {
 				const response = await stabilityCall(key);
 			}
 		});
+		setGenerated(true);
 	};
 
 	return (
-		<div>
+		<div className="ml-auto">
 			<button onClick={() => handleGenerate()}>Generate</button>
 		</div>
 	);

@@ -25,7 +25,7 @@ const Groupme = ({ groups, setGroups }) => {
 	};
 
 	return (
-		<div className="flex flex-row justify-center">
+		<div className="flex flex-row justify-evenly w-2/5 m-3">
 			<button onClick={handleRedirect}>Auth Groupme</button>
 			<button onClick={getGroupChats}>Get Group Chats</button>
 		</div>

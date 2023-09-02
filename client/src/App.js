@@ -3,7 +3,7 @@ import "./App.css";
 import Homepage from "./components/Home/Home";
 function App() {
 	return (
-		<div className="App">
+		<div className="flex flex-row justify-center bg-zinc-100">
 			<Homepage />
 		</div>
 	);
