@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./Stability.css";
-const engineId = "stable-diffusion-v1-5";
+const engineId = "stable-diffusion-512-v2-1";
 const apiHost = "https://api.stability.ai";
 
 const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
@@ -10,8 +10,14 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 			formData.append("init_image", groups[groupKey].resizedBlob);
 			formData.append("init_image_mode", "IMAGE_STRENGTH");
 			formData.append("image_strength", 0.5);
-			formData.append("text_prompts[0][text]", "light background with clouds");
-			formData.append("style_preset", "fantasy-art");
+			formData.append(
+				"text_prompts[0][text]",
+				`Turn the image into an anime style artwork. Don't include text`
+			);
+			formData.append("text_prompts[0][weight]", 1);
+			// formData.append("text_prompts[1][text]", "blurry");
+			// formData.append("text_prompts[1][weight]", -1);
+			formData.append("style_preset", "anime");
 			formData.append("cfg_scale", 7);
 			formData.append("samples", 1);
 			formData.append("steps", 30);
@@ -108,11 +114,9 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 		});
 		if (res.ok) {
 			groups.map(async (group, key) => {
-				if (key == 0) {
-					const groupImageBlob = await getImageBlob(group, key);
-					if (groupImageBlob) {
-						const response = await stabilityCall(key);
-					}
+				const groupImageBlob = await getImageBlob(group, key);
+				if (groupImageBlob) {
+					const response = await stabilityCall(key);
 				}
 			});
 			setGenerated(true);
