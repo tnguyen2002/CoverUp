@@ -4,15 +4,16 @@ import queryString from "query-string";
 
 const Groupme = ({ setGroups, auth, setAuth }) => {
 	const baseURL = "https://api.groupme.com/v3";
-	const [accessToken, setAccessToken] = useState("");
+	const [retrieved, setRetrieved] = useState(false);
 
 	useEffect(() => {
 		const parsed = queryString.parse(window.location.search);
 		const token = parsed.access_token;
-		console.log("token", token);
 		if (token) {
 			sessionStorage.setItem("access_token", token);
 			setAuth(true);
+			getGroupChats();
+			setRetrieved(true);
 		}
 	}, []);
 	const handleRedirect = () => {
@@ -36,16 +37,23 @@ const Groupme = ({ setGroups, auth, setAuth }) => {
 	};
 
 	return auth ? (
-		<button classname="bg-black font-sans" onClick={getGroupChats}>
-			Get Group Chats
-		</button>
+		!retrieved ? (
+			<div
+				className="underline hover:cursor-pointer font-bold font-sans p-3"
+				onClick={getGroupChats}
+			>
+				Get Chats →
+			</div>
+		) : (
+			<div></div>
+		)
 	) : (
-		<button
-			className="bg-black font-sans aspect-[4/3]"
+		<div
+			className="underline hover:cursor-pointer font-bold font-sans p-3"
 			onClick={handleRedirect}
 		>
-			Auth Groupme
-		</button>
+			Login →
+		</div>
 	);
 };
 export default Groupme;
