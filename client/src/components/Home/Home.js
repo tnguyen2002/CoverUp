@@ -12,6 +12,7 @@ const Homepage = () => {
 
 	return (
 		<div className="flex flex-col w-4/5 m-8 rounded items-center">
+			{/* {console.log("groups in return", groups)} */}
 			<div className="flex flex-row justify-center items-center h-1/2">
 				<Groupme
 					groups={groups}
@@ -46,8 +47,12 @@ const Homepage = () => {
 								<p className="truncate w-3/4 text-center underline underline-offset-2 font-sans font-medium mb-1 p-1">
 									{group.name}
 								</p>
-								{group.image_url ? (
-									<img width="200px" src={group.image_url} alt={group.name} />
+								{group.other_user.avatar_url ? (
+									<img
+										width="200px"
+										src={group.other_user.avatar_url}
+										alt={group.name}
+									/>
 								) : (
 									<img width="200px" src={rick} alt="rick" />
 								)}

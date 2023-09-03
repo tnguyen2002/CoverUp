@@ -21,13 +21,13 @@ const Groupme = ({ setGroups, auth, setAuth }) => {
 	};
 
 	const getGroupChats = async () => {
-		console.log("access token", sessionStorage.getItem("access_token"));
 		if (sessionStorage.getItem("access_token")) {
 			const response = await fetch(
-				`${baseURL}/groups?access_token=${sessionStorage.getItem(
+				`${baseURL}/chats?access_token=${sessionStorage.getItem(
 					"access_token"
 				)}`
 			);
+			console.log(response);
 			await response.json().then((data) => {
 				setGroups(data.response);
 			});

@@ -9,14 +9,20 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 			const formData = new FormData();
 			formData.append("init_image", groups[groupKey].resizedBlob);
 			formData.append("init_image_mode", "IMAGE_STRENGTH");
-			formData.append("image_strength", 0.5);
+			formData.append("image_strength", 0.4);
 			formData.append(
 				"text_prompts[0][text]",
-				`Turn the image into an anime style artwork. Don't include text`
+				`upper-body portrait illustration of an anime character in the style of anime drawn in manga. 
+				warm colors, illustration, concept art,
+				character concept, cinematic, key art, high detail, intricate abstract`
 			);
 			formData.append("text_prompts[0][weight]", 1);
-			// formData.append("text_prompts[1][text]", "blurry");
-			// formData.append("text_prompts[1][weight]", -1);
+			formData.append(
+				"text_prompts[1][text]",
+				"blurry, bad, ugly, deform, disfigured, sexy, nudity"
+			);
+			formData.append("text_prompts[1][weight]", -1);
+			formData.append("seed", 2);
 			formData.append("style_preset", "anime");
 			formData.append("cfg_scale", 7);
 			formData.append("samples", 1);
@@ -84,8 +90,8 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 		return new Promise((resolve) => resolve(canvas));
 	};
 	const getImageBlob = async (group, key) => {
-		if (group.image_url) {
-			const imageID = group.image_url.split("/")[3];
+		if (group.other_user.avatar_url) {
+			const imageID = group.other_user.avatar_url.split("/")[3];
 			const api = `http://localhost:4000/images/${imageID}`;
 			const image = await fetch(`http://localhost:4000/images/${imageID}`)
 				.then((response) => response.blob())
@@ -112,6 +118,7 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 				Authorization: `Bearer ${apiKey}`,
 			},
 		});
+		console.log("res", res);
 		if (res.ok) {
 			groups.map(async (group, key) => {
 				const groupImageBlob = await getImageBlob(group, key);
