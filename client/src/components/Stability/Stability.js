@@ -220,7 +220,7 @@ const Stability = ({
 
 	return (
 		<div
-			className="hover:cursor-pointer font-bold font-sans p-3 pl-0"
+			className="hover:cursor-pointer hover:text-violet-800 font-bold font-sans p-3 pl-0"
 			onClick={() => handleGenerate()}
 		>
 			Generate →
