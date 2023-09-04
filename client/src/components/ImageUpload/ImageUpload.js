@@ -14,6 +14,12 @@ const ImageUpload = ({ setBase64Uploaded }) => {
 
 	return (
 		<input
+			className="block w-full text-sm text-slate-500
+						file:mr-4 file:py-2 file:px-4
+						file:rounded-full file:border-0
+						file:text-sm file:font-semibold
+						file:bg-zinc-100 file:text-black
+						hover:file:bg-violet-100"
 			type="file"
 			ref={fileInputRef}
 			multiple={false}
