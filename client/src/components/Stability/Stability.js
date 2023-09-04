@@ -3,13 +3,18 @@ import "./Stability.css";
 const engineId = "stable-diffusion-512-v2-1";
 const apiHost = "https://api.stability.ai";
 
-const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
-	const stabilityCall = async (groupKey) => {
+const Stability = ({
+	apiKey,
+	base64Uploaded,
+	generatedPics,
+	setGeneratedPics,
+}) => {
+	const stabilityCall = async (resizedImage, style) => {
 		if (apiKey) {
 			const formData = new FormData();
-			formData.append("init_image", groups[groupKey].resizedBlob);
+			formData.append("init_image", resizedImage);
 			formData.append("init_image_mode", "IMAGE_STRENGTH");
-			formData.append("image_strength", 0.4);
+			formData.append("image_strength", 0.5);
 			formData.append(
 				"text_prompts[0][text]",
 				`upper-body portrait illustration of an anime character in the style of anime drawn in manga. 
@@ -22,7 +27,7 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 				"blurry, bad, ugly, deform, disfigured, sexy, nudity"
 			);
 			formData.append("text_prompts[1][weight]", -1);
-			formData.append("seed", 2);
+			// formData.append("seed", 2);
 			formData.append("style_preset", "anime");
 			formData.append("cfg_scale", 7);
 			formData.append("samples", 1);
@@ -38,12 +43,13 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 					body: formData,
 				}
 			);
+
 			const responseJSON = await response.json();
 			if (response.ok) {
-				responseJSON.artifacts.forEach((image, key) => {
-					const newGroups = [...groups];
-					newGroups[groupKey].stability_images_base64s = image.base64;
-					setGroups(newGroups);
+				responseJSON.artifacts.forEach((image) => {
+					const newGeneratedPics = [...generatedPics, image.base64];
+					console.log("newGeneratedPics", newGeneratedPics);
+					setGeneratedPics(newGeneratedPics);
 				});
 				return new Promise((resolve) => resolve(responseJSON));
 			}
@@ -56,25 +62,7 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 			}, "image/png");
 		});
 	};
-	const blobFileReader = (blobData, key) => {
-		const reader = new FileReader();
-		return new Promise((resolve, reject) => {
-			reader.onerror = () => {
-				reader.abort();
-				reject(new DOMException("Problem parsing input file."));
-			};
-			reader.onload = () => {
-				const base64String = reader.result;
-				resolve(base64String);
-			};
-			reader.readAsDataURL(blobData);
-		});
-	};
-	const resizeToCanvas = async (blobData, key) => {
-		const base64String = await blobFileReader(blobData, key);
-		const newGroups = [...groups];
-		newGroups[key].base64 = base64String;
-		setGroups(newGroups);
+	const resizeToCanvas = async (base64String) => {
 		let img = new Image();
 		img.src = base64String;
 		await new Promise((resolve) => img.addEventListener("load", resolve));
@@ -89,27 +77,10 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 		ctx.canvas.originalHeight = img.height;
 		return new Promise((resolve) => resolve(canvas));
 	};
-	const getImageBlob = async (group, key) => {
-		if (group.other_user.avatar_url) {
-			const imageID = group.other_user.avatar_url.split("/")[3];
-			const api = `http://localhost:4000/images/${imageID}`;
-			const image = await fetch(`http://localhost:4000/images/${imageID}`)
-				.then((response) => response.blob())
-				.then(async (blob) => {
-					const canvas = await resizeToCanvas(blob, key);
-					const resizedBlob = await blobify(canvas);
-					const newGroups = groups;
-					newGroups[key].resizedBlob = resizedBlob;
-					setGroups(newGroups);
-				});
-			return new Promise((resolve) => resolve(groups[key].resizedBlob));
-		} else {
-			const newGroups = groups;
-			newGroups[key].resizedBlob = null;
-			newGroups[key].base64 = null;
-			setGroups(newGroups);
-			return new Promise((resolve) => resolve(groups[key].resizedBlob));
-		}
+	const getImageBlob = async () => {
+		const canvas = await resizeToCanvas(base64Uploaded);
+		const resizedBlob = await blobify(canvas);
+		return new Promise((resolve) => resolve(resizedBlob));
 	};
 	const handleGenerate = async () => {
 		const res = await fetch(`${apiHost}/v1/user/account`, {
@@ -120,13 +91,8 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 		});
 		console.log("res", res);
 		if (res.ok) {
-			groups.map(async (group, key) => {
-				const groupImageBlob = await getImageBlob(group, key);
-				if (groupImageBlob) {
-					const response = await stabilityCall(key);
-				}
-			});
-			setGenerated(true);
+			const resizedImage = await getImageBlob();
+			const response = await stabilityCall(resizedImage, "anime");
 		} else {
 			alert("Double Check API Key");
 		}
@@ -134,10 +100,10 @@ const Stability = ({ groups, setGroups, setGenerated, apiKey }) => {
 
 	return (
 		<div
-			className="underline hover:cursor-pointer font-bold font-sans p-3"
+			className="underline hover:cursor-pointer font-bold font-sans p-3 "
 			onClick={() => handleGenerate()}
 		>
-			Generate →
+			Generate
 		</div>
 	);
 };
