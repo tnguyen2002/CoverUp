@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import "./Stability.css";
 const engineId = "stable-diffusion-512-v2-1";
 // const engineId = "stable-diffusion-xl-beta-v2-2-2";

@@ -12,7 +12,7 @@ const Homepage = () => {
 	return (
 		<div className="flex flex-col w-4/5 m-8 rounded items-center">
 			<div className="flex flex-row w-full items-center">
-				<img height="50%" src={logo} />
+				<img height="50%" src={logo} alt="" />
 				<h1 className="text-4xl font-bold ml-3">CoverUp</h1>
 			</div>
 			<div className="flex flex-row w-full items-center">
@@ -51,9 +51,7 @@ const Homepage = () => {
 			</div>
 			<div className="flex flex-row w-full">
 				<div className="self-center">
-					{base64Uploaded && (
-						<img width="200px" src={base64Uploaded} alt={"image"} />
-					)}
+					{base64Uploaded && <img width="200px" src={base64Uploaded} alt="" />}
 				</div>
 				<div className="flex flex-wrap w-3/4 m-2">
 					{Object.keys(generatedPics).map((style, key) => {
@@ -66,7 +64,7 @@ const Homepage = () => {
 								<img
 									width="200px"
 									src={`data:image/png;base64,${generatedPics[style].artifacts[0].base64}`}
-									alt={"image"}
+									alt=""
 								/>
 							</div>
 						);
