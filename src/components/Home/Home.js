@@ -57,12 +57,12 @@ const Homepage = () => {
 					{Object.keys(generatedPics).map((style, key) => {
 						return (
 							<div key={key} className="flex flex-col items-center w-1/3">
-								{console.log("style", style)}
-								<p className="truncate w-3/4 text-center underline underline-offset-2 font-sans font-medium mb-1 p-1">
+								{/* {console.log("style", style)} */}
+								{/* <p className="truncate w-3/4 text-center underline underline-offset-2 font-sans font-medium mb-1 p-1">
 									{style}
-								</p>
+								</p> */}
 								<img
-									width="200px"
+									className="p-1"
 									src={`data:image/png;base64,${generatedPics[style].artifacts[0].base64}`}
 									alt=""
 								/>
