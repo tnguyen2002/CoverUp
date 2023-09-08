@@ -1,7 +1,7 @@
 # CovverUp
 ### Profile Pictures + StableDiffusion
 
-*Note: this is a toy project I built out over a weekend. 
+*Nothing crazy just whipped up for fun
 
 CovverUp converts a profile picture into uniquely styled photos using stable diffusion. Prompts are in the formdata in Stability.js
 
