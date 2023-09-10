@@ -9,11 +9,17 @@ const Homepage = () => {
 	const [base64Uploaded, setBase64Uploaded] = useState("");
 	const [generatedPics, setGeneratedPics] = useState([]);
 	const [loading, setLoading] = useState(false);
+	const [prompt, setPrompt] = useState({
+		gender: "",
+		hair: "",
+		outfit: "",
+		background: "",
+	});
 	return (
 		<div className="flex flex-col w-4/5 m-8 rounded items-center">
 			<div className="flex flex-row w-full items-center">
 				<img height="50%" src={logo} alt="" />
-				<h1 className="text-4xl font-bold ml-3">CoverUp</h1>
+				<h1 className="text-4xl font-bold ml-3">CovverUp</h1>
 			</div>
 			<div className="flex flex-row w-full items-center">
 				{!base64Uploaded && (
@@ -28,6 +34,7 @@ const Homepage = () => {
 						generatedPics={generatedPics}
 						setGeneratedPics={setGeneratedPics}
 						setLoading={setLoading}
+						prompt={prompt}
 					/>
 				)}
 				{base64Uploaded && (
@@ -51,16 +58,49 @@ const Homepage = () => {
 			</div>
 			<div className="flex flex-row w-full">
 				<div className="self-center">
-					{base64Uploaded && <img width="200px" src={base64Uploaded} alt="" />}
+					{base64Uploaded && (
+						<div className="flex flex-col">
+							<img width="200px" src={base64Uploaded} alt="" />
+							Gender:
+							<textarea
+								className="h-5 resize-none overflow-hidden"
+								value={prompt.gender}
+								onChange={(event) => {
+									setPrompt({
+										...prompt,
+										gender: event.target.value,
+									});
+								}}
+							/>
+							Outfit:
+							<textarea
+								className="h-5 resize-none overflow-hidden"
+								value={prompt.outfit}
+								onChange={(event) => {
+									setPrompt({
+										...prompt,
+										outfit: event.target.value,
+									});
+								}}
+							/>
+							Background:
+							<textarea
+								className="h-5 resize-none overflow-hidden"
+								value={prompt.background}
+								onChange={(event) => {
+									setPrompt({
+										...prompt,
+										background: event.target.value,
+									});
+								}}
+							/>
+						</div>
+					)}
 				</div>
 				<div className="flex flex-wrap w-3/4 m-2">
 					{Object.keys(generatedPics).map((style, key) => {
 						return (
 							<div key={key} className="flex flex-col items-center w-1/3">
-								{/* {console.log("style", style)} */}
-								{/* <p className="truncate w-3/4 text-center underline underline-offset-2 font-sans font-medium mb-1 p-1">
-									{style}
-								</p> */}
 								<img
 									className="p-1"
 									src={`data:image/png;base64,${generatedPics[style].artifacts[0].base64}`}

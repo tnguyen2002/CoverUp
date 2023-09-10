@@ -11,6 +11,7 @@ const Stability = ({
 	base64Uploaded,
 	setGeneratedPics,
 	setLoading,
+	prompt,
 }) => {
 	const createStyles = async (resizedImage) => {
 		const styles = {};
@@ -20,7 +21,7 @@ const Stability = ({
 		animeFormData.append("image_strength", 0.5);
 		animeFormData.append(
 			"text_prompts[0][text]",
-			`upper-body illustration of an anime character. warm colors, illustration, concept art,
+			`${prompt.gender}, ${prompt.outfit}, ${prompt.background}, illustration in the style of anime, high quality, digital painting. warm colors, illustration, concept art,
 			character concept, ultra high detail, key art, highly detailed facial features, intricate abstract`
 		);
 		animeFormData.append("text_prompts[0][weight]", 1);
@@ -29,53 +30,10 @@ const Stability = ({
 			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
 		);
 		animeFormData.append("text_prompts[1][weight]", -1);
-		// animeFormData.append("seed", 2);
 		animeFormData.append("style_preset", "anime");
 		animeFormData.append("cfg_scale", 7);
 		animeFormData.append("samples", 1);
-		animeFormData.append("steps", 30);
-
-		const cartoonFormData = new FormData();
-		cartoonFormData.append("init_image", resizedImage);
-		cartoonFormData.append("init_image_mode", "IMAGE_STRENGTH");
-		cartoonFormData.append("image_strength", 0.5);
-		cartoonFormData.append(
-			"text_prompts[0][text]",
-			`upper-body illustration in the style of marvel comics. 
-				warm colors, illustration, concept art, character concept, key art, highly detailed facial features, intricate abstract`
-		);
-		cartoonFormData.append("text_prompts[0][weight]", 1);
-		cartoonFormData.append(
-			"text_prompts[1][text]",
-			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
-		);
-		cartoonFormData.append("text_prompts[1][weight]", -1);
-		// cartoonFormData.append("seed", 2);
-		cartoonFormData.append("style_preset", "comic-book");
-		cartoonFormData.append("cfg_scale", 7);
-		cartoonFormData.append("samples", 1);
-		cartoonFormData.append("steps", 30);
-
-		const fantasyFormData = new FormData();
-		fantasyFormData.append("init_image", resizedImage);
-		fantasyFormData.append("init_image_mode", "IMAGE_STRENGTH");
-		fantasyFormData.append("image_strength", 0.6);
-		fantasyFormData.append(
-			"text_prompts[0][text]",
-			`upper-body portrait illustration of a fantasy character. warm colors, illustration, concept art,
-			character concept, cinematic, key art, high detail, intricate abstract`
-		);
-		fantasyFormData.append("text_prompts[0][weight]", 1);
-		fantasyFormData.append(
-			"text_prompts[1][text]",
-			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
-		);
-		fantasyFormData.append("text_prompts[1][weight]", -1);
-		// fantasyFormData.append("seed", 2);
-		fantasyFormData.append("style_preset", "fantasy-art");
-		fantasyFormData.append("cfg_scale", 7);
-		fantasyFormData.append("samples", 1);
-		fantasyFormData.append("steps", 30);
+		animeFormData.append("steps", 40);
 
 		const superheroFormData = new FormData();
 		superheroFormData.append("init_image", resizedImage);
@@ -83,7 +41,7 @@ const Stability = ({
 		superheroFormData.append("image_strength", 0.5);
 		superheroFormData.append(
 			"text_prompts[0][text]",
-			`upper-body illustration of a superhero with a costume in the style of DC Comics. character design, cinematic lighting,
+			`${prompt.gender}, ${prompt.outfit}, ${prompt.background},illustration in the style of DC Comics. character design, cinematic lighting,
 			symmetrical, global illumination, trending on artstation, highly detailed facial features, concept art, illustration`
 		);
 		superheroFormData.append("text_prompts[0][weight]", 1);
@@ -92,72 +50,10 @@ const Stability = ({
 			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
 		);
 		superheroFormData.append("text_prompts[1][weight]", -1);
-		// cinematicFormData.append("seed", 2);
 		superheroFormData.append("style_preset", "comic-book");
 		superheroFormData.append("cfg_scale", 7);
 		superheroFormData.append("samples", 1);
-		superheroFormData.append("steps", 30);
-
-		const jediFormData = new FormData();
-		jediFormData.append("init_image", resizedImage);
-		jediFormData.append("init_image_mode", "IMAGE_STRENGTH");
-		jediFormData.append("image_strength", 0.5);
-		jediFormData.append(
-			"text_prompts[0][text]",
-			`upper-body illustration in the style of star wars. character design, cinematic lighting,
-			symmetrical, global illumination, radiant light, trending on artstation, concept art, illustration`
-		);
-		jediFormData.append("text_prompts[0][weight]", 1);
-		jediFormData.append(
-			"text_prompts[1][text]",
-			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
-		);
-		jediFormData.append("text_prompts[1][weight]", -1);
-		jediFormData.append("cfg_scale", 7);
-		jediFormData.append("samples", 1);
-		jediFormData.append("steps", 30);
-
-		const digitalFormData = new FormData();
-		digitalFormData.append("init_image", resizedImage);
-		digitalFormData.append("init_image_mode", "IMAGE_STRENGTH");
-		digitalFormData.append("image_strength", 0.5);
-		digitalFormData.append(
-			"text_prompts[0][text]",
-			`upper-body portrait illustration in the style of digital-art. warm colors, concept art,
-			character concept, key art, high detail, intricate abstract`
-		);
-		digitalFormData.append("text_prompts[0][weight]", 1);
-		digitalFormData.append(
-			"text_prompts[1][text]",
-			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
-		);
-		digitalFormData.append("text_prompts[1][weight]", -1);
-		// animeFormData.append("seed", 2);
-		digitalFormData.append("style_preset", "digital-art");
-		digitalFormData.append("cfg_scale", 7);
-		digitalFormData.append("samples", 1);
-		digitalFormData.append("steps", 30);
-
-		const ninjaFormData = new FormData();
-		ninjaFormData.append("init_image", resizedImage);
-		ninjaFormData.append("init_image_mode", "IMAGE_STRENGTH");
-		ninjaFormData.append("image_strength", 0.55);
-		ninjaFormData.append(
-			"text_prompts[0][text]",
-			`an illustration of a ninja. warm colors, concept art,
-			character concept, key art, high detail`
-		);
-		ninjaFormData.append("text_prompts[0][weight]", 1);
-		ninjaFormData.append(
-			"text_prompts[1][text]",
-			"blurry, bad, ugly, deform, disfigured, sexy, nudity"
-		);
-		ninjaFormData.append("text_prompts[1][weight]", -1);
-		// animeFormData.append("seed", 2);
-		// testFormData.append("style_preset", "digital-art");
-		ninjaFormData.append("cfg_scale", 7);
-		ninjaFormData.append("samples", 1);
-		ninjaFormData.append("steps", 30);
+		superheroFormData.append("steps", 40);
 
 		const isometricFormData = new FormData();
 		isometricFormData.append("init_image", resizedImage);
@@ -165,7 +61,7 @@ const Stability = ({
 		isometricFormData.append("image_strength", 0.6);
 		isometricFormData.append(
 			"text_prompts[0][text]",
-			`an illustration of a character in an isometric style. warm colors, concept art,
+			`${prompt.gender}, ${prompt.outfit}, ${prompt.background}, illustration of a character in an isometric style. warm colors, concept art,
 		character concept, key art, high detail`
 		);
 		isometricFormData.append("text_prompts[0][weight]", 1);
@@ -177,18 +73,11 @@ const Stability = ({
 		isometricFormData.append("style_preset", "isometric");
 		isometricFormData.append("cfg_scale", 7);
 		isometricFormData.append("samples", 1);
-		isometricFormData.append("steps", 30);
+		isometricFormData.append("steps", 40);
 
 		styles.Anime = animeFormData;
-		styles.Cartoon = cartoonFormData;
-		styles.Fantasy = fantasyFormData;
-		styles.Digital = digitalFormData;
-		styles.Ninja = ninjaFormData;
 		styles.Isometric = isometricFormData;
-
-		// styles.Superhero = superheroFormData;
-		// styles.Jedi = jediFormData;
-		// styles.Ninja = ninjaFormData;
+		styles.Superhero = superheroFormData;
 		return new Promise((resolve) => resolve(styles));
 	};
 	const stabilityCall = async (resizedImage) => {
@@ -198,6 +87,7 @@ const Stability = ({
 			console.log("styles", styles);
 			for (const style in styles) {
 				const formData = styles[style];
+				console.log(style, formData);
 				const response = await fetch(
 					`${apiHost}/v1/generation/${engineId}/image-to-image`,
 					{
@@ -229,8 +119,8 @@ const Stability = ({
 		let img = new Image();
 		img.src = base64String;
 		await new Promise((resolve) => img.addEventListener("load", resolve));
-		let sw = 1024;
-		let sh = 1024;
+		let sw = 768;
+		let sh = 768;
 		let canvas = document.createElement("canvas");
 		canvas.width = sw;
 		canvas.height = sh;
